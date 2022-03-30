@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Palette+Mosaic');
+
+#image-and-title{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.5rem auto;
+  gap:1rem;
+}
+
+#image-and-title{
+  font-family: 'Palette Mosaic', cursive;
+  font-size:1rem;
+}
+
+

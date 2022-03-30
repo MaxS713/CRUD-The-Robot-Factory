@@ -1,0 +1,28 @@
+#overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0; /*The overlay covers the whole screen with TBLR properties of 0 and a position: fixed*/
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.6); /*A black color with an opacity setting creates a "dim" effect */
+  transition: opacity 500ms; 
+}
+
+#modal-background {
+  position: fixed;
+  z-index: 4;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  outline: 5px solid blue;
+  background-color: white;
+  width: 75vw;
+  height: 80vh;
+  }
+
+  #modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
