@@ -5,26 +5,26 @@
   gap:5vw;
 }
 
-#robot-data{
-  display: flex;
+#robot-list{
+  display:flex;
+  flex-direction: column;
   overflow-x: hidden;
   overflow-y: scroll;
   height:50vh;
-  width:50vw;
+  width:40vw;
   padding:1.5rem;
   outline: 5px solid blue;
 }
 
-#robot-data h1{
+.robot-data{
+  display: flex;
+  align-items: center;
+}
+
+.robot-data h1{
   font-size: 1.5rem;
   margin:0;
   font-style: italic;
-}
-
-
-#robot-data h2{
-  font-size: 1.25rem;
-  margin:0;
 }
 
 aside{

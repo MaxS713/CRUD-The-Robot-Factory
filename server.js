@@ -61,6 +61,10 @@ app.post("/add-user", async (req, res) => {
   user.save();
 });
 
+// app.post("/delete-robot", async (req, res) => {
+
+// });
+
 app.listen(port, () => {
   console.log("Now listening on http://localhost:" + port);
 });
