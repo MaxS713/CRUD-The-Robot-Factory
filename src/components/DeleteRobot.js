@@ -1,12 +1,24 @@
 import React, {useState} from "react";
+import DeleteConfirmBox from "./DeleteConfirmBox";
 
 import "./modal.css";
 
 export default function DeleteRobotModal(props) {
+
+  const [confirmBoxModalState, setConfirmBoxModalState] = useState(false);
+
+  function handleClickConfirmBox(event) {
+    if (confirmBoxModalState === true) {
+      setConfirmBoxModalState(false);
+    } else {
+      setConfirmBoxModalState(true);
+    }
+  }
+
+
   const [inputToDelete, setInputToDelete] = useState(
     {creatorName: props.creatorName},
     {robotName: ""},
-    {imageNumber: ""}
   );
 
   function handleChangesToDelete(event) {
@@ -16,16 +28,6 @@ export default function DeleteRobotModal(props) {
     });
   }
 
-  async function handleDelete(event) {
-    event.preventDefault();
-    await fetch("http://localhost:5000/delete-robot", {
-      headers: {"content-type": "application/json"},
-      method: "POST",
-      body: JSON.stringify(inputToDelete),
-    }).then(
-      (window.location.href = `/dashboard?username=${props.creatorName}`)
-    );
-  }
 
   if (props.modalState === true) {
     return (
@@ -33,8 +35,9 @@ export default function DeleteRobotModal(props) {
         <div id="modal-background">
           <div id="modal-content">
             <h1>DELETE</h1>
-            <form onSubmit={handleDelete}>
-              <p>Add a new robot:</p>
+            <form>
+              <p>Enter the name of the robot you would like to delete:</p>
+              <p>You will get 200 recycled</p>
               <label>
                 Name:
                 <input
@@ -43,12 +46,18 @@ export default function DeleteRobotModal(props) {
                   onChange={handleChangesToDelete}
                 />
               </label>
-              <div></div>
-              <button type="submit">Submit</button>
+              <div>
+              <button onClick={(event) => {event.preventDefault(); handleClickConfirmBox()}}>Submit</button>
               <button onClick={props.handleClick}>Cancel</button>
+              </div>
             </form>
           </div>
         </div>
+        <DeleteConfirmBox
+          handleClick={handleClickConfirmBox}
+          modalState={confirmBoxModalState}
+          inputToDelete={inputToDelete}
+        />
       </main>
     );
   } else {

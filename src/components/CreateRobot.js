@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import Carousel from "react-simply-carousel";
+import CreateConfirmBox from "./CreateConfirmBox";
 
 import Robot1 from "../images/robots/robot-1.png";
 import Robot2 from "../images/robots/robot-2.png";
@@ -16,6 +17,15 @@ import Robot11 from "../images/robots/robot-11.png";
 import "./modal.css";
 
 export default function CreateNewRobotModal(props) {
+  const [confirmBoxModalState, setConfirmBoxModalState] = useState(false);
+  function handleClickConfirmBox(event) {
+    if (confirmBoxModalState === true) {
+      setConfirmBoxModalState(false);
+    } else {
+      setConfirmBoxModalState(true);
+    }
+  }
+
   const [activeSlide, setActiveSlide] = useState(0);
 
   const [inputToCreate, setInputToCreate] = useState(
@@ -32,15 +42,11 @@ export default function CreateNewRobotModal(props) {
     });
   }
 
-  async function handleCreate(event) {
-    event.preventDefault();
-    await fetch("http://localhost:5000/add-robot", {
-      headers: {"content-type": "application/json"},
-      method: "POST",
-      body: JSON.stringify(inputToCreate),
-    }).then(
-      (window.location.href = `/dashboard?username=${props.creatorName}`)
-    );
+  function setImageNumber() {
+    setInputToCreate({
+      ...inputToCreate,
+      imageNumber: (activeSlide + 1).toString(),
+    });
   }
 
   if (props.modalState === true) {
@@ -48,9 +54,10 @@ export default function CreateNewRobotModal(props) {
       <main id="overlay">
         <div id="modal-background">
           <div id="modal-content">
-            <h1>MODAL</h1>
-            <form onSubmit={handleCreate}>
-              <p>Add a new robot:</p>
+            <h1>Construct A Robot</h1>
+            <form>
+              <p>Here you can add a robot to your roster.</p>
+              <p>To build it, it will cost 200.</p>
               <label>
                 Name:
                 <input
@@ -136,11 +143,24 @@ export default function CreateNewRobotModal(props) {
                   </div>
                 </Carousel>
               </div>
-              <button type="submit">Submit</button>
+              <button
+                onClick={(event) => {
+                  event.preventDefault();
+                  setImageNumber();
+                  handleClickConfirmBox();
+                }}
+              >
+                Submit
+              </button>
               <button onClick={props.handleClick}>Cancel</button>
             </form>
           </div>
         </div>
+        <CreateConfirmBox
+          handleClick={handleClickConfirmBox}
+          modalState={confirmBoxModalState}
+          inputToCreate={inputToCreate}
+        />
       </main>
     );
   } else {

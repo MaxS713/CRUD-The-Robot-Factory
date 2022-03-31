@@ -10,7 +10,6 @@
 
 #modal-background {
   position: fixed;
-  z-index: 4;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -20,9 +19,33 @@
   height: 80vh;
   }
 
+  
   #modal-content {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+  }
+  
+#confirm-background{
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  outline: 5px solid blue;
+  background-color: white;
+  width: 60vw;
+  height: 65vh;
+}
+
+#confirm-content{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+  #players-list{
+    display:flex;
   }
