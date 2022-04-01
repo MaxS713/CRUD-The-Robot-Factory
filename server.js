@@ -6,7 +6,7 @@ const cors = require("cors");
 
 const mongoose = require("mongoose");
 
-mongoose.connect("mongodb://localhost:27017/factory");
+mongoose.connect("mongodb+srv://MaxS713:nwcc4cJr0mTYpju4@cluster0.bgmkx.mongodb.net/factory");
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error"));
 
@@ -17,7 +17,7 @@ const robotSchema = new mongoose.Schema({
   creatorName: String,
   robotName: String,
   currentStatus: String,
-  startedWork: Date,
+  startedWork: Number,
   imageNumber: String,
   date: String,
 });
@@ -33,22 +33,37 @@ const Robot = mongoose.model("robots", robotSchema);
 const UserInfo = mongoose.model("UserInfos", UserSchema);
 
 app.get("/get-all-robots", async (req, res) => {
-  console.log("1")
   let allRobots = await Robot.find({});
   res.send(allRobots);
 });
 
 app.get("/get-all-users", async (req, res) => {
-  console.log("2")
   let allUsers = await UserInfo.find({});
   res.send(allUsers);
 });
 
 app.get("/user/:username", async (req, res) => {
   let user = await UserInfo.findOne(req.params);
-  let userRobots = await Robot.find({creatorName: req.params.username});
-
-  console.log(userRobots)
+  let userRobotsGathering = await Robot.find({creatorName: req.params.username, currentStatus: "Gathering"});
+  if (userRobotsGathering.length !== 0){
+    let currentTime = Date.now()
+    let newAmountOfResources = 0;
+    
+    userRobotsGathering.forEach((gatherer) => {
+      let totalTimeGathering = currentTime - gatherer.startedWork
+      let resourcesGathered = Math.floor(totalTimeGathering/43200)
+      if (resourcesGathered>500){
+        resourcesGathered = 500
+      }
+      newAmountOfResources = newAmountOfResources + resourcesGathered;
+    })
+    await Robot.updateMany({creatorName: req.params.username, currentStatus: "Gathering"}, {startedWork: currentTime});
+    let totalAmountOfResources = newAmountOfResources + user.resources
+    await UserInfo.updateOne(
+      {username: req.params.username},
+      {$set: {resources: totalAmountOfResources}}
+    );
+  }
   res.send(user);
 });
 
@@ -83,6 +98,13 @@ app.post("/update-status", async (req, res) => {
     {_id: req.body._id},
     {$set: {currentStatus: req.body.currentStatus}}
   );
+  if (req.body.currentStatus==="Gathering"){
+    let currentTime = Date.now()
+    await Robot.updateOne(
+      {_id: req.body._id},
+      {$set: {startedWork: currentTime}}
+    );
+  }
 });
 
 app.post("/delete-robot", async (req, res) => {
@@ -103,7 +125,3 @@ app.post("/delete-robot", async (req, res) => {
 app.listen(port, () => {
   console.log("Now listening on http://localhost:" + port);
 });
-
-let date = new Date()
-console.log(date)
-console.log(typeof date)
