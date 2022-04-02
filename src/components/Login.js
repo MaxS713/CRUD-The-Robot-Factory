@@ -49,11 +49,10 @@ export default function Login() {
     );
 
   const renderForm = (
-    <div className="form">
       <form onSubmit={handleSubmit}>
         <div className="input-container">
           <label>Username </label>
-          <input type="text" name="uname" required />
+          <input type="text" name="uname" autocomplete="off" required />
           {renderErrorMessage("uname")}
         </div>
         <div className="input-container">
@@ -62,13 +61,10 @@ export default function Login() {
           {renderErrorMessage("pass")}
         </div>
         <div className="button-container">
-          <input type="submit" />
+          <button type="submit">Log In</button>
+          <a href="/create-new-user">Create New User</a>
         </div>
       </form>
-      <div className="button-container">
-          <a href="/create-new-user">Create New User</a>
-      </div>
-    </div>
   );
 
   return (

@@ -3,6 +3,7 @@ import CreateNewRobotModal from "./CreateRobot";
 import DeleteRobotModal from "./DeleteRobot";
 import CombatModal from "./Combat";
 import StatusModal from "./Status";
+import NotificationModal from "./NotificationModal";
 import ProgressBar from "./ProgressBar";
 import "./Dashboard.css";
 
@@ -56,9 +57,9 @@ function App() {
     if (statusModalState === true) {
       setStatusModalState(false);
     } else {
-      setSelectedRobotID(event.target.id)
-      setSelectedRobotName(event.target.name)
-      setSelectedRobotStatus(event.target.status)
+      setSelectedRobotID(event.target.id);
+      setSelectedRobotName(event.target.name);
+      setSelectedRobotStatus(event.target.status);
       setStatusModalState(true);
     }
   }
@@ -103,7 +104,13 @@ function App() {
       allRobotsArray.push(robot.robotName);
       allStatusArray.push(robot.currentStatus);
     }
-  })
+  });
+
+  const [raidNotificationModalState, setRaidNotificationModalState] =
+    useState(false);
+  if (currentUserData.beenAttacked === true) {
+    setRaidNotificationModalState(true);
+  }
 
   return (
     <main>
@@ -130,13 +137,21 @@ function App() {
                       <div className="robot-description">
                         <h1>{robot.robotName}</h1>
                         <p>Serial Number: {robot._id}</p>
-                        <p>Date Of Creation: {robot.date}</p>
+                        <p>Date Of Creation: {robot.currentDate}</p>
                         <p>Status: {robot.currentStatus}</p>
                         <div className="robot-health">
                           RobotHealth:
-                          <ProgressBar bgcolor="#6a1b9a" completed={100} />
+                          <ProgressBar
+                            bgcolor="#6a1b9a"
+                            completed={robot.health}
+                          />
                         </div>
-                        <button id={robot._id} name={robot.robotName} status={robot.currentStatus} onClick={handleClickStatus}>
+                        <button
+                          id={robot._id}
+                          name={robot.robotName}
+                          status={robot.currentStatus}
+                          onClick={handleClickStatus}
+                        >
                           Change Status
                         </button>
                       </div>
@@ -184,6 +199,12 @@ function App() {
           selectedRobotName={selectedRobotName}
           selectedRobotID={selectedRobotID}
           selectedRobotStatus={selectedRobotStatus}
+        />
+        <NotificationModal
+          modalState={raidNotificationModalState}
+          creatorName={activeUser}
+          byWhom={currentUserData.byWhom}
+          resourcesLost={currentUserData.resourcesLost}
         />
       </div>
     </main>

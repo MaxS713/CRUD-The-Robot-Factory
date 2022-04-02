@@ -16,7 +16,6 @@ export default function CombatModal(props) {
   }
 
   if (props.modalState === true) {
-    
     return (
       <main id="overlay">
         <div id="modal-background">
@@ -36,36 +35,36 @@ export default function CombatModal(props) {
               <ul>
                 {props.robotsAmount.map((amount, index) => {
                   if (index !== props.currentUserIndex) {
-                  return <li>{amount}</li>;
-                } else {
-                  return null;
-                }
+                    return <li>{amount}</li>;
+                  } else {
+                    return null;
+                  }
                 })}
               </ul>
               <ul>
                 {props.resourcesAmount.map((amount, index) => {
                   if (index !== props.currentUserIndex) {
-                  return <li>{amount}</li>;
-                } else {
-                  return null;
-                }
+                    return <li>{amount}</li>;
+                  } else {
+                    return null;
+                  }
                 })}
               </ul>
               <ul>
                 {props.allUsers.map((user, index) => {
                   if (index !== props.currentUserIndex) {
-                  return (
-                    <li
-                      onClick={handleClickConfirmBox}
-                      className="links"
-                      id={index}
-                    >
-                      Attack
-                    </li>
-                  );
-                } else {
-                  return null;
-                }
+                    return (
+                      <li
+                        onClick={handleClickConfirmBox}
+                        className="links"
+                        id={index}
+                      >
+                        Attack
+                      </li>
+                    );
+                  } else {
+                    return null;
+                  }
                 })}
               </ul>
             </div>
@@ -76,6 +75,7 @@ export default function CombatModal(props) {
           handleClick={handleClickConfirmBox}
           modalState={confirmBoxModalState}
           selectedUserIndex={selectedUserIndex}
+          currentUserIndex={props.currentUserIndex}
           usersList={props.allUsers}
           robotsAmountList={props.robotsAmount}
           resourcesAmountList={props.resourcesAmount}

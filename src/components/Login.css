@@ -16,7 +16,7 @@ input {
 }
 
 button {
-  margin-top: 10px;
+  margin: 10px 0;
   cursor: pointer;
   font-size: 15px;
   background: #01d28e;
@@ -31,7 +31,9 @@ button:hover {
 
 .button-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
 .login-form {
@@ -70,5 +72,4 @@ button:hover {
 
 input.key {
   font-family: 'password';
-  width: 100px; height: 16px;  
 }

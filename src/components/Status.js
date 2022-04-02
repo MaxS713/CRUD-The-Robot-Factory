@@ -48,8 +48,9 @@ export default function StatusModal(props) {
       <main id="overlay">
         <div id="modal-background">
           <div id="modal-content">
-            <h1>{props.selectedRobotName}'s Status</h1>
-            <form onSubmit={handleSubmit}>
+            <h1>Change {props.selectedRobotName}'s Status</h1>
+            <form id="status-form" onSubmit={handleSubmit}>
+              <div id="radios">
               <input
                 type="radio"
                 name="Defending"
@@ -71,10 +72,13 @@ export default function StatusModal(props) {
                 onChange={handleChangesToStatus}
               />
               Repair
+              </div>
+              <div id="buttons">
               <button type="submit">
                 Submit
               </button>
               <button onClick={props.handleClick}>Close</button>
+              </div>
             </form>
           </div>
         </div>

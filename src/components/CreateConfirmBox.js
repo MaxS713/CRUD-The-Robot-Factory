@@ -14,7 +14,6 @@ export default function CreateConfirmBox(props) {
       (window.location.href = `/dashboard?username=${props.inputToCreate.creatorName}`)
     );
   }
-
   if (props.modalState === true) {
     return (
       <div id="confirm-background">
