@@ -4,6 +4,7 @@ import DeleteRobotModal from "./DeleteRobot";
 import CombatModal from "./Combat";
 import StatusModal from "./Status";
 import NotificationModal from "./NotificationModal";
+import ResourcesNotificationModal from "./ResourcesNotificationModal";
 import ProgressBar from "./ProgressBar";
 import "./Dashboard.css";
 
@@ -18,6 +19,7 @@ function App() {
   const [selectedRobotName, setSelectedRobotName] = useState("");
   const [selectedRobotStatus, setSelectedRobotStatus] = useState("");
 
+  let allUserDataOrderedArray = [];
   let allUsernamesArray = [];
   let allRobotsAmountArray = [];
   let allResourcesAmountArray = [];
@@ -25,9 +27,57 @@ function App() {
   let allRobotsArray = [];
   let allStatusArray = [];
 
+  async function getRobots() {
+    let allRobots = await fetch("http://localhost:5000/get-all-robots");
+    allRobots = await allRobots.json();
+    setRobotData(allRobots);
+  }
+  useEffect(() => {
+    getRobots();
+  }, []);
+
+  async function getUsers() {
+    let allUsers = await fetch("http://localhost:5000/get-all-users");
+    allUsers = await allUsers.json();
+    setUserDatabase(allUsers);
+  }
+  useEffect(() => {
+    getUsers();
+  }, []);
+
+  async function getCurrentUserInfo() {
+    let userData = await fetch(`http://localhost:5000/user/${activeUser}`);
+    userData = await userData.json();
+    setCurrentUserData(userData);
+  }
+  useEffect(() => {
+    getCurrentUserInfo();
+  }, []);
+
+  userDatabase.forEach((user) => {
+    allUserDataOrderedArray.push(user);
+  });
+  allUserDataOrderedArray.sort((a, b) => b.numberOfRobots - a.numberOfRobots);
+
+  allUserDataOrderedArray.forEach((user) => {
+    allUsernamesArray.push(user.username);
+    allRobotsAmountArray.push(user.numberOfRobots);
+    allResourcesAmountArray.push(user.resources);
+  });
+  let currentUserIndex = allUsernamesArray.indexOf(activeUser);
+
+  robotData.forEach((robot) => {
+    if (robot.creatorName === activeUser) {
+      allRobotsArray.push(robot.robotName);
+      allStatusArray.push(robot.currentStatus);
+    }
+  });
+
   const [createRobotModalState, setCreateRobotModalState] = useState(false);
   function handleClickCreateRobot() {
-    if (createRobotModalState === true) {
+    if (currentUserData.resources < 200) {
+      setResourcesNotificationModalState(true);
+    } else if (createRobotModalState === true) {
       setCreateRobotModalState(false);
     } else {
       setCreateRobotModalState(true);
@@ -64,53 +114,16 @@ function App() {
     }
   }
 
-  async function getRobots() {
-    let allRobots = await fetch("http://localhost:5000/get-all-robots");
-    allRobots = await allRobots.json();
-    setRobotData(allRobots);
-  }
-  useEffect(() => {
-    getRobots();
-  }, []);
-
-  async function getUsers() {
-    let allUsers = await fetch("http://localhost:5000/get-all-users");
-    allUsers = await allUsers.json();
-    setUserDatabase(allUsers);
-  }
-  useEffect(() => {
-    getUsers();
-  }, []);
-
-  async function getCurrentUserInfo() {
-    let userData = await fetch(`http://localhost:5000/user/${activeUser}`);
-    userData = await userData.json();
-    setCurrentUserData(userData);
-  }
-  useEffect(() => {
-    getCurrentUserInfo();
-  }, []);
-
-  userDatabase.forEach((username) => {
-    allUsernamesArray.push(username.username);
-    allRobotsAmountArray.push(username.numberOfRobots);
-    allResourcesAmountArray.push(username.resources);
-  });
-
-  let currentUserIndex = allUsernamesArray.indexOf(activeUser);
-
-  robotData.forEach((robot) => {
-    if (robot.creatorName === activeUser) {
-      allRobotsArray.push(robot.robotName);
-      allStatusArray.push(robot.currentStatus);
-    }
-  });
+  const [resourcesNotificationModalState, setResourcesNotificationModalState] =
+    useState(false);
 
   const [raidNotificationModalState, setRaidNotificationModalState] =
     useState(false);
-  if (currentUserData.beenAttacked === true) {
-    setRaidNotificationModalState(true);
-  }
+  useEffect(() => {
+    if (currentUserData.beenAttacked === true) {
+      setRaidNotificationModalState(true);
+    }
+  }, [currentUserData.beenAttacked]);
 
   return (
     <main>
@@ -136,9 +149,6 @@ function App() {
                       </div>
                       <div className="robot-description">
                         <h1>{robot.robotName}</h1>
-                        <p>Serial Number: {robot._id}</p>
-                        <p>Date Of Creation: {robot.currentDate}</p>
-                        <p>Status: {robot.currentStatus}</p>
                         <div className="robot-health">
                           RobotHealth:
                           <ProgressBar
@@ -146,6 +156,11 @@ function App() {
                             completed={robot.health}
                           />
                         </div>
+                        <p>Status: {robot.currentStatus}</p>
+                        <p>Serial Number: {robot._id}</p>
+                        <p>Date Of Creation: {robot.currentDate}</p>
+                        
+        
                         <button
                           id={robot._id}
                           name={robot.robotName}
@@ -165,14 +180,33 @@ function App() {
           </div>
         </div>
         <aside>
-          What would you like to do?
-          <button onClick={handleClickCreateRobot}>
-            Create A New Robot (200)
-          </button>
-          <button onClick={handleClickDeleteRobot}>
-            Destroy One Of Your Robots
-          </button>
-          <button onClick={handleClickCombat}>Attack another Player!</button>
+          Robot's owner leaderboard:
+          <div id="player-list">
+            <ol>
+              {" "}
+              Username:
+              {allUserDataOrderedArray.map((user) => {
+                return <li>{user.username}</li>;
+              })}
+            </ol>
+            <ul>
+              {" "}
+              Number Of Robots:
+              {allUserDataOrderedArray.map((user) => {
+                return <li>{user.numberOfRobots}</li>;
+              })}
+            </ul>
+          </div>
+          <div id="options">
+            What would you like to do?
+            <button onClick={handleClickCreateRobot}>
+              Create A New Robot (200)
+            </button>
+            <button onClick={handleClickDeleteRobot}>
+              Destroy One Of Your Robots
+            </button>
+            <button onClick={handleClickCombat}>Attack another Player!</button>
+          </div>
         </aside>
         <CreateNewRobotModal
           handleClick={handleClickCreateRobot}
@@ -205,6 +239,10 @@ function App() {
           creatorName={activeUser}
           byWhom={currentUserData.byWhom}
           resourcesLost={currentUserData.resourcesLost}
+        />
+        <ResourcesNotificationModal
+          modalState={resourcesNotificationModalState}
+          creatorName={activeUser}
         />
       </div>
     </main>

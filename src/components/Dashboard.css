@@ -34,4 +34,11 @@ aside{
   padding:1rem;
 }
 
+#player-list{
+  display:flex;
+}
+
+#player-list ul{
+  list-style-type: none;
+}
 

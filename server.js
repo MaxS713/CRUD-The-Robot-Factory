@@ -196,7 +196,7 @@ app.post("/update-status", async (req, res) => {
   await currentRobot.save();
 });
 
-app.post("/notification-off/:username", async (req, res) => {
+app.get("/notification-off/:username", async (req, res) => {
   let currentUser = await UserInfo.findOne(req.params);
   currentUser.beenAttacked = false;
   currentUser.save()
