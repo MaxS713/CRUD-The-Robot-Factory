@@ -20,53 +20,57 @@ export default function CombatModal(props) {
       <main id="overlay">
         <div id="modal-background">
           <div id="modal-content">
-            <h1>FIGHT</h1>
-            Which player would you like to attack?
-            <div id="players-list">
-              <ul>
+            <h1>RAID</h1>
+            Which other player would you like to attack?
+            <div id="combat-list">
+              <div className="table">
+                <p className="thead">Username:</p>
                 {props.allUsers.map((user, index) => {
                   if (index !== props.currentUserIndex) {
-                    return <li>{user}</li>;
+                    return <p>{user}</p>;
                   } else {
                     return null;
                   }
                 })}
-              </ul>
-              <ul>
+              </div>
+              <div className="table">
+              <p className="thead">Robots:</p>
                 {props.robotsAmount.map((amount, index) => {
                   if (index !== props.currentUserIndex) {
-                    return <li>{amount}</li>;
+                    return <p>{amount}</p>;
                   } else {
                     return null;
                   }
                 })}
-              </ul>
-              <ul>
+              </div>
+              <div className="table">
+              <p className="thead">Resources:</p>
                 {props.resourcesAmount.map((amount, index) => {
                   if (index !== props.currentUserIndex) {
-                    return <li>{amount}</li>;
+                    return <p>{amount}</p>;
                   } else {
                     return null;
                   }
                 })}
-              </ul>
-              <ul>
+              </div>
+              <div className="table">
+              <p>&nbsp;</p>
                 {props.allUsers.map((user, index) => {
                   if (index !== props.currentUserIndex) {
                     return (
-                      <li
+                      <p
                         onClick={handleClickConfirmBox}
                         className="links"
                         id={index}
                       >
-                        Attack
-                      </li>
+                        Select
+                      </p>
                     );
                   } else {
                     return null;
                   }
                 })}
-              </ul>
+              </div>
             </div>
             <button onClick={props.handleClick}>Cancel</button>
           </div>

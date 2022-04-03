@@ -2,6 +2,8 @@ import React, {useState} from "react";
 import Carousel from "react-simply-carousel";
 import CreateConfirmBox from "./CreateConfirmBox";
 
+import Gear from "../images/gear.png";
+
 import Robot1 from "../images/robots/robot-1.png";
 import Robot2 from "../images/robots/robot-2.png";
 import Robot3 from "../images/robots/robot-3.png";
@@ -12,7 +14,6 @@ import Robot7 from "../images/robots/robot-7.png";
 import Robot8 from "../images/robots/robot-8.png";
 import Robot9 from "../images/robots/robot-9.png";
 import Robot10 from "../images/robots/robot-10.png";
-import Robot11 from "../images/robots/robot-11.png";
 
 import "./modal.css";
 
@@ -57,21 +58,27 @@ export default function CreateNewRobotModal(props) {
             <h1>Construct A Robot</h1>
             <form>
               <p>Here you can add a robot to your roster.</p>
-              <p>To build it, it will cost 200.</p>
+              <p>
+                To build it, it will cost:
+                <span className="resources-in-p">
+                  &nbsp;200
+                  <img src={Gear} alt="a small machine gear" height="15px" />
+                </span>
+              </p>
               <label>
-                Name:
+                Name:&nbsp;
                 <input
                   type="text"
                   name="robotName"
                   onChange={handleChangesToCreate}
+                  autocomplete="off"
                 />
               </label>
-              <div>
+              <div id="carousel">
                 <Carousel
                   updateOnItemClick
                   containerProps={{
                     style: {
-                      width: "100%",
                       justifyContent: "space-between",
                     },
                   }}
@@ -99,60 +106,55 @@ export default function CreateNewRobotModal(props) {
                   speed={400}
                 >
                   <div>
-                    <img src={Robot1} alt="robot-1" width="300" height="300" />
+                    <img src={Robot1} alt="robot-1" height="280" width="180" />
                   </div>
                   <div>
-                    <img src={Robot2} alt="robot-2" width="300" height="300" />
+                    <img src={Robot2} alt="robot-2" height="280" width="180" />
                   </div>
                   <div>
-                    <img src={Robot3} alt="robot-3" width="300" height="300" />
+                    <img src={Robot3} alt="robot-3" height="280" width="180" />
                   </div>
                   <div>
-                    <img src={Robot4} alt="robot-4" width="300" height="300" />
+                    <img src={Robot4} alt="robot-4" height="280" width="180" />
                   </div>
                   <div>
-                    <img src={Robot5} alt="robot-5" width="300" height="300" />
+                    <img src={Robot5} alt="robot-5" height="280" width="180" />
                   </div>
                   <div>
-                    <img src={Robot6} alt="robot-6" width="300" height="300" />
+                    <img src={Robot6} alt="robot-6" height="280" width="180" />
                   </div>
                   <div>
-                    <img src={Robot7} alt="robot-7" width="300" height="300" />
+                    <img src={Robot7} alt="robot-7" height="280" width="180" />
                   </div>
                   <div>
-                    <img src={Robot8} alt="robot-8" width="300" height="300" />
+                    <img src={Robot8} alt="robot-8" height="280" width="180" />
                   </div>
                   <div>
-                    <img src={Robot9} alt="robot-9" width="300" height="300" />
+                    <img src={Robot9} alt="robot-9" height="280" width="180" />
                   </div>
                   <div>
                     <img
                       src={Robot10}
                       alt="robot-10"
-                      width="300"
-                      height="300"
-                    />
-                  </div>
-                  <div>
-                    <img
-                      src={Robot11}
-                      alt="robot-11"
-                      width="300"
-                      height="300"
+                      height="280"
+                      width="180"
                     />
                   </div>
                 </Carousel>
               </div>
+              <div id="buttons">
               <button
+                disabled={!inputToCreate.robotName || confirmBoxModalState}
                 onClick={(event) => {
                   event.preventDefault();
                   setImageNumber();
                   handleClickConfirmBox();
                 }}
               >
-                Submit
+                Create
               </button>
-              <button onClick={props.handleClick}>Cancel</button>
+              <button disabled={confirmBoxModalState} onClick={props.handleClick}>Cancel</button>
+              </div>
             </form>
           </div>
         </div>

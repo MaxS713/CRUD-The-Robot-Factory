@@ -4,29 +4,27 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: 20px;
-  height: 100vh;
-  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-  background-color: #f8f9fd;
+  margin-top: 5vh;
 }
 
 input {
-  height: 25px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 0.5rem;
+  font-size:1.2rem;
+  border: 2px solid #9AA59A;
 }
 
 button {
   margin: 10px 0;
   cursor: pointer;
   font-size: 15px;
-  background: #01d28e;
-  border: 1px solid #01d28e;
+  background: #80D0B2;
+  border: none;
   color: #fff;
   padding: 10px 20px;
 }
 
 button:hover {
-  background: #6cf0c2;
+  outline: 1px solid black;
 }
 
 .button-container {
@@ -39,7 +37,7 @@ button:hover {
 .login-form {
   background-color: white;
   padding: 2rem;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border: 2px solid #9AA59A;
 }
 
 .list-container {
@@ -48,19 +46,21 @@ button:hover {
 
 .error {
   color: red;
-  font-size: 12px;
+  font-size: 1rem;
 }
 
 .title {
-  font-size: 25px;
-  margin-bottom: 20px;
+  font-size: 1.5rem;
+  margin-bottom: 2vh;
+  color:#8BA6A9;
+  text-align: center;
 }
 
 .input-container {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin: 10px;
+  gap: 2vh;
+  margin: 2vh;
 }
 
 @font-face {

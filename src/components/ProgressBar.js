@@ -3,6 +3,7 @@ const ProgressBar = (props) => {
 
   const containerStyles = {
     height: 20,
+    width:150,
     backgroundColor: "#e0e0de",
     borderRadius: 50,
   };

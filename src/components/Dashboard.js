@@ -5,10 +5,14 @@ import CombatModal from "./Combat";
 import StatusModal from "./Status";
 import NotificationModal from "./NotificationModal";
 import ResourcesNotificationModal from "./ResourcesNotificationModal";
+import RobotsNotificationModal from "./RobotsNotificationModal";
+import NoRobotsNotificationModal from "./NoRobotsNotificationModal";
+import PhoneNotificationModal from "./RotatePhoneNotif";
 import ProgressBar from "./ProgressBar";
+import Gear from "../images/gear.png";
 import "./Dashboard.css";
 
-function App() {
+function Dashboard() {
   let params = new URLSearchParams(document.location.search);
   let activeUser = params.get("username");
 
@@ -23,6 +27,7 @@ function App() {
   let allUsernamesArray = [];
   let allRobotsAmountArray = [];
   let allResourcesAmountArray = [];
+  let numberOfDefendingRobots = 0;
 
   let allRobotsArray = [];
   let allStatusArray = [];
@@ -71,11 +76,21 @@ function App() {
       allRobotsArray.push(robot.robotName);
       allStatusArray.push(robot.currentStatus);
     }
+    if (robot.currentStatus === "Defending"){
+      numberOfDefendingRobots++
+    }
   });
 
+  const [resourcesNotificationModalState, setResourcesNotificationModalState] =
+    useState(false);
   const [createRobotModalState, setCreateRobotModalState] = useState(false);
   function handleClickCreateRobot() {
-    if (currentUserData.resources < 200) {
+    if (
+      currentUserData.resources < 200 &&
+      resourcesNotificationModalState === true
+    ) {
+      setResourcesNotificationModalState(false);
+    } else if (currentUserData.resources < 200) {
       setResourcesNotificationModalState(true);
     } else if (createRobotModalState === true) {
       setCreateRobotModalState(false);
@@ -84,18 +99,36 @@ function App() {
     }
   }
 
+  const [robotsNotificationModalState, setRobotsNotificationModalState] =
+    useState(false);
   const [deleteRobotModalState, setDeleteRobotModalState] = useState(false);
   function handleClickDeleteRobot() {
-    if (deleteRobotModalState === true) {
+    if (
+      currentUserData.numberOfRobots === 0 &&
+      robotsNotificationModalState === true
+    ) {
+      setRobotsNotificationModalState(false);
+    } else if (currentUserData.numberOfRobots === 0) {
+      setRobotsNotificationModalState(true);
+    } else if (deleteRobotModalState === true) {
       setDeleteRobotModalState(false);
     } else {
       setDeleteRobotModalState(true);
     }
   }
 
+  const [noRobotsNotificationModalState, setNoRobotsNotificationModalState] =
+    useState(false);
   const [combatModalState, setCombatModalState] = useState(false);
   function handleClickCombat() {
-    if (combatModalState === true) {
+    if (
+      numberOfDefendingRobots === 0 &&
+      noRobotsNotificationModalState === true
+    ) {
+      setNoRobotsNotificationModalState(false);
+    } else if (numberOfDefendingRobots === 0) {
+      setNoRobotsNotificationModalState(true);
+    } else if (combatModalState === true) {
       setCombatModalState(false);
     } else {
       setCombatModalState(true);
@@ -114,9 +147,6 @@ function App() {
     }
   }
 
-  const [resourcesNotificationModalState, setResourcesNotificationModalState] =
-    useState(false);
-
   const [raidNotificationModalState, setRaidNotificationModalState] =
     useState(false);
   useEffect(() => {
@@ -127,12 +157,24 @@ function App() {
 
   return (
     <main>
-      <h1>Welcome {activeUser}</h1>
-      <p>Available Resources: {currentUserData.resources}</p>
+      <div id="header">
+        <h1>Welcome {activeUser}</h1>
+        <p>
+          Available resources:{" "}
+          <span className="number">{currentUserData.resources}</span>
+          <span>
+            <img src={Gear} alt="a small machine gear" height="30px" />
+          </span>
+        </p>
+      </div>
       <div id="dashboard">
         <div id="left-side">
-          <h2>Your Robots:</h2>
-          <p>You have {currentUserData.numberOfRobots} robots</p>
+          <div id="robot-list-header">
+            <h2>
+              Your Robots:
+              <span>(You have {currentUserData.numberOfRobots} robots)</span>
+            </h2>
+          </div>
           <div id="robot-list">
             {robotData.map((robot) => {
               if (robot.creatorName === activeUser) {
@@ -150,17 +192,25 @@ function App() {
                       <div className="robot-description">
                         <h1>{robot.robotName}</h1>
                         <div className="robot-health">
-                          RobotHealth:
+                          <span>Robot's health:</span>
                           <ProgressBar
-                            bgcolor="#6a1b9a"
+                            bgcolor="#80D0B2"
                             completed={robot.health}
                           />
                         </div>
-                        <p>Status: {robot.currentStatus}</p>
-                        <p>Serial Number: {robot._id}</p>
-                        <p>Date Of Creation: {robot.currentDate}</p>
-                        
-        
+                        <p>
+                          <span>Status: </span>
+                          {robot.currentStatus}
+                        </p>
+                        <p className="robot-id">
+                          <span>Serial Number: </span>
+                          {robot._id}
+                        </p>
+                        <p className="date">
+                          <span>Date Of Creation: </span>
+                          {robot.currentDate}
+                        </p>
+
                         <button
                           id={robot._id}
                           name={robot.robotName}
@@ -180,32 +230,52 @@ function App() {
           </div>
         </div>
         <aside>
-          Robot's owner leaderboard:
-          <div id="player-list">
-            <ol>
-              {" "}
-              Username:
-              {allUserDataOrderedArray.map((user) => {
-                return <li>{user.username}</li>;
-              })}
-            </ol>
-            <ul>
-              {" "}
-              Number Of Robots:
-              {allUserDataOrderedArray.map((user) => {
-                return <li>{user.numberOfRobots}</li>;
-              })}
-            </ul>
+          <div id="leaderboard">
+            <h3>Robots owner leaderboard:</h3>
+            <div id="player-list">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Rank</th>
+                    <th>Username</th>
+                    <th>Number Of Robots</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {allUserDataOrderedArray.map((user, index) => {
+                    return (
+                      <tr>
+                        <td>{index + 1}</td>
+                        <td>{user.username}</td>
+                        <td>{user.numberOfRobots}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
           <div id="options">
             What would you like to do?
             <button onClick={handleClickCreateRobot}>
-              Create A New Robot (200)
+              <div className="resources-in-button">
+                Create A New Robot ( - 200
+                <span>
+                  <img src={Gear} alt="a small machine gear" height="15px" />
+                </span>
+                )
+              </div>
             </button>
             <button onClick={handleClickDeleteRobot}>
-              Destroy One Of Your Robots
+              <div className="resources-in-button">
+                Destroy A Robot ( + 150
+                <span>
+                  <img src={Gear} alt="a small machine gear" height="15px" />
+                </span>
+                )
+              </div>
             </button>
-            <button onClick={handleClickCombat}>Attack another Player!</button>
+            <button onClick={handleClickCombat}>Attack another player!</button>
           </div>
         </aside>
         <CreateNewRobotModal
@@ -217,6 +287,7 @@ function App() {
           handleClick={handleClickDeleteRobot}
           modalState={deleteRobotModalState}
           creatorName={activeUser}
+          allRobots={allRobotsArray}
         />
         <CombatModal
           handleClick={handleClickCombat}
@@ -241,12 +312,21 @@ function App() {
           resourcesLost={currentUserData.resourcesLost}
         />
         <ResourcesNotificationModal
+          handleClick={handleClickCreateRobot}
           modalState={resourcesNotificationModalState}
-          creatorName={activeUser}
         />
+        <RobotsNotificationModal
+          handleClick={handleClickDeleteRobot}
+          modalState={robotsNotificationModalState}
+        />
+        <NoRobotsNotificationModal
+          handleClick={handleClickCombat}
+          modalState={noRobotsNotificationModalState}
+        />
+        <PhoneNotificationModal/>
       </div>
     </main>
   );
 }
 
-export default App;
+export default Dashboard;

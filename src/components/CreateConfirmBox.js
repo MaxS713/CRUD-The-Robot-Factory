@@ -1,9 +1,7 @@
 import React from "react";
 import "./modal.css";
 
-
 export default function CreateConfirmBox(props) {
-
   async function handleCreate(event) {
     event.preventDefault();
     await fetch("http://localhost:5000/add-robot", {
@@ -19,15 +17,17 @@ export default function CreateConfirmBox(props) {
       <div id="confirm-background">
         <div id="confirm-content">
           <h1>You're going to create this robot:</h1>
-          {props.inputToCreate.robotName}
+          <p>{props.inputToCreate.robotName}</p>
           <img
-                        src={require(`../images/robots/robot-${props.inputToCreate.imageNumber}.png`)}
-                        alt={`robot-${props.inputToCreate.imageNumber}`}
-                        width="150"
-                        height="200"
-                      />
-          <button onClick={handleCreate}>Confirm</button>
-          <button onClick={props.handleClick}>Go Back</button>
+            src={require(`../images/robots/robot-${props.inputToCreate.imageNumber}.png`)}
+            alt={`robot-${props.inputToCreate.imageNumber}`}
+            width="150"
+            height="200"
+          />
+          <div id="buttons">
+            <button onClick={handleCreate}>Confirm</button>
+            <button onClick={props.handleClick}>Go Back</button>
+          </div>
         </div>
       </div>
     );

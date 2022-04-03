@@ -46,6 +46,7 @@ export default function Login() {
                 required
               />
             </div>
+            <div className="button-container">
             <button
               onClick={(event) => {
                 event.preventDefault();
@@ -54,6 +55,7 @@ export default function Login() {
             >
               Register
             </button>
+            </div>
           </form>
         </div>
       </div>
