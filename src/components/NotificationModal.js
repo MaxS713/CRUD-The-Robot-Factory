@@ -6,7 +6,7 @@ export default function NotificationModal(props) {
   async function handleClick(event) {
     event.preventDefault();
     await fetch(
-      `http://localhost:5000/notification-off/${props.creatorName}`
+      `https://crud-backend-navy.vercel.app/notification-off/${props.creatorName}`
     ).then((window.location.href = `/dashboard?username=${props.creatorName}`));
   }
 
