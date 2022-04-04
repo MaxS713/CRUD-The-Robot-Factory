@@ -12,7 +12,7 @@ export default function Login() {
   const [currentUser, setCurrentUser] = useState("")
 
   async function getUsers() {
-    let allUsers = await fetch("https://crud-backend-navy.vercel.app/get-all-users");
+    let allUsers = await fetch("api/get-all-users");
     allUsers = await allUsers.json();
     setUserDatabase(allUsers);
   }

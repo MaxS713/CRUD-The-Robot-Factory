@@ -4,7 +4,7 @@ import "./modal.css";
 export default function DeleteConfirmBox(props) {
   async function handleDelete(event) {
     event.preventDefault();
-    await fetch("https://crud-backend-navy.vercel.app/delete-robot", {
+    await fetch("api/delete-robot", {
       headers: {"content-type": "application/json"},
       method: "POST",
       body: JSON.stringify({

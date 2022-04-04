@@ -8,7 +8,7 @@ export default function CombatDebrief(props) {
   async function getRaidReport() {
     if (props.modalState === true && fetchDataLoop === 0) {
       let raidData = await fetch(
-        `https://crud-backend-navy.vercel.app/combat/${props.attackingPlayer}/${props.attackedPlayer}`
+        `api/combat/${props.attackingPlayer}/${props.attackedPlayer}`
       );
       raidData = await raidData.json();
       setRaidData(raidData);

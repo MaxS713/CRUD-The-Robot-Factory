@@ -4,7 +4,7 @@ import "./modal.css";
 export default function CreateConfirmBox(props) {
   async function handleCreate(event) {
     event.preventDefault();
-    await fetch("https://crud-backend-navy.vercel.app/add-robot", {
+    await fetch("api/add-robot", {
       headers: {"content-type": "application/json"},
       method: "POST",
       body: JSON.stringify(props.inputToCreate),
