@@ -1,6 +1,7 @@
 
 const express = require("express");
 const app = express();
+const { v4 } = require('uuid');
 const port = process.env.PORT || 5000;
 const cors = require("cors");
 
@@ -37,6 +38,13 @@ const UserSchema = new mongoose.Schema({
 
 const Robot = mongoose.model("robots", robotSchema);
 const UserInfo = mongoose.model("UserInfos", UserSchema);
+
+app.get('/api', (req, res) => {
+  const path = `/api/item/${v4()}`;
+  res.setHeader('Content-Type', 'text/html');
+  res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
+  res.end(`Hello! Go to item: <a href="${path}">${path}</a>`);
+});
 
 app.get("/get-all-robots", async (req, res) => {
   let allRobots = await Robot.find({});
@@ -231,3 +239,5 @@ app.post("/delete-robot", async (req, res) => {
 app.listen(port, () => {
   console.log("Now listening on http://localhost:" + port);
 });
+
+module.exports = app;
