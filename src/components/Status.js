@@ -9,7 +9,7 @@ export default function StatusModal(props) {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    await fetch("http://localhost:5000/update-status", {
+    await fetch("https://crud-backend-navy.vercel.app/update-status", {
       headers: {"content-type": "application/json"},
       method: "POST",
       body: JSON.stringify(statusToChange),

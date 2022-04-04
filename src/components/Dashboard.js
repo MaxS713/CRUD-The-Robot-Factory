@@ -33,7 +33,7 @@ function Dashboard() {
   let allStatusArray = [];
 
   async function getRobots() {
-    let allRobots = await fetch("http://localhost:5000/get-all-robots");
+    let allRobots = await fetch("https://crud-backend-navy.vercel.app/get-all-robots");
     allRobots = await allRobots.json();
     setRobotData(allRobots);
   }
@@ -42,7 +42,7 @@ function Dashboard() {
   }, []);
 
   async function getUsers() {
-    let allUsers = await fetch("http://localhost:5000/get-all-users");
+    let allUsers = await fetch("https://crud-backend-navy.vercel.app/get-all-users");
     allUsers = await allUsers.json();
     setUserDatabase(allUsers);
   }
@@ -51,7 +51,7 @@ function Dashboard() {
   }, []);
 
   async function getCurrentUserInfo() {
-    let userData = await fetch(`http://localhost:5000/user/${activeUser}`);
+    let userData = await fetch(`https://crud-backend-navy.vercel.app/user/${activeUser}`);
     userData = await userData.json();
     setCurrentUserData(userData);
   }

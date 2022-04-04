@@ -6,7 +6,7 @@ export default function NewUserConfirm(props) {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    await fetch("http://localhost:5000/add-user", {
+    await fetch("https://crud-backend-navy.vercel.app/add-user", {
       headers: {"content-type": "application/json"},
       method: "POST",
       body: JSON.stringify(props.userData),
