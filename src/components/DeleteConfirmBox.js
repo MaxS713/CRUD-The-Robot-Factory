@@ -12,7 +12,7 @@ export default function DeleteConfirmBox(props) {
         robotName: props.allRobots[props.indexToDelete],
       }),
     }).then(
-      (window.location.href = `/dashboard?username=${props.creatorName}`)
+      (window.location.href = `/dashboard?username=${btoa(props.creatorName)}`)
     );
   }
 

@@ -14,7 +14,7 @@ export default function StatusModal(props) {
       method: "POST",
       body: JSON.stringify(statusToChange),
     }).then(
-      (window.location.href = `/dashboard?username=${props.creatorName}`)
+      (window.location.href = `/dashboard?username=${btoa(props.creatorName)}`)
     );
   }
   

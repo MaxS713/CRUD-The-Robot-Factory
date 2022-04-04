@@ -55,7 +55,7 @@ export default function CreateNewRobotModal(props) {
       <main id="overlay">
         <div id="modal-background">
           <div id="modal-content">
-            <h1>Construct A Robot</h1>
+            <h1>Create A Robot</h1>
             <form>
               <p>Here you can add a robot to your roster.</p>
               <p>
@@ -66,7 +66,7 @@ export default function CreateNewRobotModal(props) {
                 </span>
               </p>
               <label>
-                Name:&nbsp;
+                Robot name:&nbsp;
                 <input
                   type="text"
                   name="robotName"

@@ -7,7 +7,7 @@ export default function NotificationModal(props) {
     event.preventDefault();
     await fetch(
       `api/notification-off/${props.creatorName}`
-    ).then((window.location.href = `/dashboard?username=${props.creatorName}`));
+    ).then((window.location.href = `/dashboard?username=${btoa(props.creatorName)}`));
   }
 
   if (props.modalState === true) {

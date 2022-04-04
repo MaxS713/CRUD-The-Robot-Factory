@@ -8,13 +8,14 @@ import ResourcesNotificationModal from "./ResourcesNotificationModal";
 import RobotsNotificationModal from "./RobotsNotificationModal";
 import NoRobotsNotificationModal from "./NoRobotsNotificationModal";
 import PhoneNotificationModal from "./RotatePhoneNotif";
+import HowToPlayModal from "./HowToPlayModal";
 import ProgressBar from "./ProgressBar";
 import Gear from "../images/gear.png";
 import "./Dashboard.css";
 
 function Dashboard() {
   let params = new URLSearchParams(document.location.search);
-  let activeUser = params.get("username");
+  let activeUser = atob(params.get("username"));
 
   const [currentUserData, setCurrentUserData] = useState([]);
   const [robotData, setRobotData] = useState([]);
@@ -76,8 +77,8 @@ function Dashboard() {
       allRobotsArray.push(robot.robotName);
       allStatusArray.push(robot.currentStatus);
     }
-    if (robot.currentStatus === "Defending"){
-      numberOfDefendingRobots++
+    if (robot.currentStatus === "Defending") {
+      numberOfDefendingRobots++;
     }
   });
 
@@ -154,6 +155,15 @@ function Dashboard() {
       setRaidNotificationModalState(true);
     }
   }, [currentUserData.beenAttacked]);
+
+  const [howToPlayModalState, setHowToPlayModalState] = useState(false);
+  function handleHowToPlayClick() {
+    if (howToPlayModalState === true) {
+      setHowToPlayModalState(false);
+    } else {
+      setHowToPlayModalState(true);
+    }
+  }
 
   return (
     <main>
@@ -323,8 +333,13 @@ function Dashboard() {
           handleClick={handleClickCombat}
           modalState={noRobotsNotificationModalState}
         />
-        <PhoneNotificationModal/>
+        <HowToPlayModal
+          handleClick={handleHowToPlayClick}
+          modalState={howToPlayModalState}
+        />
+        <PhoneNotificationModal />
       </div>
+      <button id="help-button" onClick={handleHowToPlayClick}>Help<span>?</span></button>
     </main>
   );
 }

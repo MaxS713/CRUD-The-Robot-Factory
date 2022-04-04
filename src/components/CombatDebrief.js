@@ -28,14 +28,14 @@ export default function CombatDebrief(props) {
             <div id="confirm-content">
               <h1>You raided: {props.attackedPlayer} and won!</h1>
               <p>
-                {props.attackedPlayer} had {raidData.robotsDefending} robot(s) defending when you
+                {props.attackedPlayer} had {raidData.robotsDefending - 1} robot(s) defending when you
                 arrived.
               </p>
               <p>You were able to steal {raidData.resources} resources!</p>
               <p>Your robots lost a little health during the assault...</p>
               <button
                 onClick={() => {
-                  window.location.href = `/dashboard?username=${props.attackingPlayer}`;
+                  window.location.href = `/dashboard?username=${btoa(props.attackingPlayer)}`;
                 }}
               >
                 OK
@@ -60,7 +60,7 @@ export default function CombatDebrief(props) {
               <p>Your robots lost some health during the assault...</p>
               <button
                 onClick={() => {
-                  window.location.href = `/dashboard?username=${props.attackingPlayer}`;
+                  window.location.href = `/dashboard?username=${btoa(props.attackingPlayer)}`;
                 }}
               >
                 OK

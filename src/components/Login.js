@@ -71,7 +71,7 @@ export default function Login() {
     <div className="app">
       <div className="login-form">
         <div className="title">Sign In</div>
-        {isSubmitted ? navigate(`/dashboard?username=${currentUser}`) : renderForm}
+        {isSubmitted ? navigate(`/dashboard?username=${btoa(currentUser)}`) : renderForm}
       </div>
     </div>
   );

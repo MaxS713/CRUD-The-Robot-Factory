@@ -9,7 +9,7 @@ export default function CreateConfirmBox(props) {
       method: "POST",
       body: JSON.stringify(props.inputToCreate),
     }).then(
-      (window.location.href = `/dashboard?username=${props.inputToCreate.creatorName}`)
+      (window.location.href = `/dashboard?username=${btoa(props.inputToCreate.creatorName)}`)
     );
   }
   if (props.modalState === true) {
