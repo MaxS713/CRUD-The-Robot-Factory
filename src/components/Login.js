@@ -52,12 +52,12 @@ export default function Login() {
       <form onSubmit={handleSubmit}>
         <div className="input-container">
           <label>Username </label>
-          <input type="text" name="uname" autocomplete="off" required />
+          <input type="text" name="uname" autoComplete="off" required />
           {renderErrorMessage("uname")}
         </div>
         <div className="input-container">
           <label>Passcode :</label>
-          <input className="key" type="text" autocomplete="off" name="pass" required />
+          <input className="key" type="text" autoComplete="off" name="pass" required />
           {renderErrorMessage("pass")}
         </div>
         <div className="button-container">

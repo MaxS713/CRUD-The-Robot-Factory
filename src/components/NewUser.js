@@ -30,7 +30,7 @@ export default function Login() {
               <input
                 type="text"
                 name="username"
-                autocomplete="off"
+                autoComplete="off"
                 onChange={handleChanges}
                 required
               />
@@ -40,7 +40,7 @@ export default function Login() {
               <input
                 className="key"
                 type="text"
-                autocomplete="off"
+                autoComplete="off"
                 name="passcode"
                 onChange={handleChanges}
                 required

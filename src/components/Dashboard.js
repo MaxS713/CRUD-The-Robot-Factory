@@ -220,7 +220,6 @@ function Dashboard() {
                           <span>Date Of Creation: </span>
                           {robot.currentDate}
                         </p>
-
                         <button
                           id={robot._id}
                           name={robot.robotName}
@@ -339,7 +338,9 @@ function Dashboard() {
         />
         <PhoneNotificationModal />
       </div>
-      <button id="help-button" onClick={handleHowToPlayClick}>Help<span>?</span></button>
+      <button id="help-button" onClick={handleHowToPlayClick}>
+        Help<span>?</span>
+      </button>
     </main>
   );
 }

@@ -211,7 +211,6 @@ app.post("/api/add-user", async (req, res) => {
 });
 
 app.post("/api/update-status", async (req, res) => {
-  console.log(req.body.currentStatus)
   let currentRobot = await Robot.findOne({_id: req.body._id});
   currentRobot.currentStatus = req.body.currentStatus;
   if (
@@ -221,7 +220,6 @@ app.post("/api/update-status", async (req, res) => {
     let currentTime = Date.now();
     currentRobot.startedWork = currentTime;
   }
-  console.log(currentRobot)
   await currentRobot.save();
 });
 

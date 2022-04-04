@@ -71,7 +71,7 @@ export default function CreateNewRobotModal(props) {
                   type="text"
                   name="robotName"
                   onChange={handleChangesToCreate}
-                  autocomplete="off"
+                  autoComplete="off"
                 />
               </label>
               <div id="carousel">
