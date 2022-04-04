@@ -51,17 +51,17 @@ app.get('/api/item/:slug', (req, res) => {
   res.end(`Item: ${slug}`);
 });
 
-app.get("/get-all-robots", async (req, res) => {
+app.get("/api/get-all-robots", async (req, res) => {
   let allRobots = await Robot.find({});
   res.send(allRobots);
 });
 
-app.get("/get-all-users", async (req, res) => {
+app.get("/api/get-all-users", async (req, res) => {
   let allUsers = await UserInfo.find({});
   res.send(allUsers);
 });
 
-app.get("/user/:username", async (req, res) => {
+app.get("/api/user/:username", async (req, res) => {
   let currentUser = await UserInfo.findOne(req.params);
   let currentTime = Date.now();
   let userRobotsGathering = await Robot.find({
@@ -108,7 +108,7 @@ app.get("/user/:username", async (req, res) => {
   res.send(currentUser);
 });
 
-app.get("/combat/:user1/:user2", async (req, res) => {
+app.get("/api/combat/:user1/:user2", async (req, res) => {
   let user1 = await UserInfo.findOne({username: req.params.user1});
   let user2 = await UserInfo.findOne({username: req.params.user2});
   let robotsUser1 = await Robot.find({
@@ -188,7 +188,7 @@ app.get("/combat/:user1/:user2", async (req, res) => {
   }
 });
 
-app.post("/add-robot", async (req, res) => {
+app.post("/api/add-robot", async (req, res) => {
   let robot = new Robot(req.body);
   let currentDate = new Date().toLocaleString();
   robot.currentDate = currentDate;
@@ -203,14 +203,14 @@ app.post("/add-robot", async (req, res) => {
   await currentUser.save();
 });
 
-app.post("/add-user", async (req, res) => {
+app.post("/api/add-user", async (req, res) => {
   let user = new UserInfo(req.body);
   user.resources = 500;
   user.numberOfRobots = 0;
   await user.save();
 });
 
-app.post("/update-status", async (req, res) => {
+app.post("/api/update-status", async (req, res) => {
   console.log(req.body.currentStatus)
   let currentRobot = await Robot.findOne({_id: req.body._id});
   currentRobot.currentStatus = req.body.currentStatus;
@@ -225,13 +225,13 @@ app.post("/update-status", async (req, res) => {
   await currentRobot.save();
 });
 
-app.get("/notification-off/:username", async (req, res) => {
+app.get("/api/notification-off/:username", async (req, res) => {
   let currentUser = await UserInfo.findOne(req.params);
   currentUser.beenAttacked = false;
   currentUser.save();
 });
 
-app.post("/delete-robot", async (req, res) => {
+app.post("/api/delete-robot", async (req, res) => {
   await Robot.deleteOne(req.body);
   let currentUser = await UserInfo.findOne({username: req.body.creatorName});
   let newNumberOfRobots = currentUser.numberOfRobots - 1;
