@@ -1,9 +1,8 @@
-
 const express = require("express");
 const port = process.env.PORT || 5000;
 const cors = require("cors");
-const app = require('express')();
-const { v4 } = require('uuid');
+const app = require("express")();
+const {v4} = require("uuid");
 
 const mongoose = require("mongoose");
 
@@ -39,15 +38,15 @@ const UserSchema = new mongoose.Schema({
 const Robot = mongoose.model("robots", robotSchema);
 const UserInfo = mongoose.model("UserInfos", UserSchema);
 
-app.get('/api', (req, res) => {
+app.get("/api", (req, res) => {
   const path = `/api/item/${v4()}`;
-  res.setHeader('Content-Type', 'text/html');
-  res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
+  res.setHeader("Content-Type", "text/html");
+  res.setHeader("Cache-Control", "s-max-age=1, stale-while-revalidate");
   res.end(`Hello! Go to item: <a href="${path}">${path}</a>`);
 });
 
-app.get('/api/item/:slug', (req, res) => {
-  const { slug } = req.params;
+app.get("/api/item/:slug", (req, res) => {
+  const {slug} = req.params;
   res.end(`Item: ${slug}`);
 });
 
@@ -64,6 +63,15 @@ app.get("/api/get-all-users", async (req, res) => {
 app.get("/api/user/:username", async (req, res) => {
   let currentUser = await UserInfo.findOne(req.params);
   let currentTime = Date.now();
+  let allUsersRobots = await Robot.find({
+    creatorName: req.params.username,
+  });
+  for (let robot of allUsersRobots) {
+    if (robot.health <= 0) {
+      robot.currentStatus = "Broken";
+      await robot.save()
+    }
+  }
   let userRobotsGathering = await Robot.find({
     creatorName: req.params.username,
     currentStatus: "Gathering",
@@ -72,6 +80,7 @@ app.get("/api/user/:username", async (req, res) => {
     creatorName: req.params.username,
     currentStatus: "Repairing",
   });
+
   if (userRobotsGathering.length !== 0) {
     let newAmountOfResources = 0;
     userRobotsGathering.forEach((gatherer) => {
@@ -132,16 +141,20 @@ app.get("/api/combat/:user1/:user2", async (req, res) => {
       robot.health = robot.health - 50;
       await robot.save();
     }
-    let newAmountOfResourcesUser1 = user1.resources + Math.floor(user2.resources / 2);
+    let newAmountOfResourcesUser1 =
+      user1.resources + Math.floor(user2.resources / 2);
     let newAmountOfResourcesUser2 = Math.floor(user2.resources / 2);
     user1.resources = newAmountOfResourcesUser1;
     await user1.save();
     user2.resources = newAmountOfResourcesUser2;
     await user2.save();
-    checkHealth();
     raidReport("lost");
     res.send(
-      JSON.stringify({win: user1.username, resources: Math.floor(user2.resources / 2), robotsDefending: robotsUser2.length + 1})
+      JSON.stringify({
+        win: user1.username,
+        resources: Math.floor(user2.resources / 2),
+        robotsDefending: robotsUser2.length + 1,
+      })
     );
   } else {
     for (let robot of robotsUser2) {
@@ -152,35 +165,27 @@ app.get("/api/combat/:user1/:user2", async (req, res) => {
       robot.health = robot.health - 50;
       await robot.save();
     }
-    let newAmountOfResourcesUser2 = user2.resources + Math.floor(user1.resources / 2);
+    let newAmountOfResourcesUser2 =
+      user2.resources + Math.floor(user1.resources / 2);
     let newAmountOfResourcesUser1 = Math.floor(user1.resources / 2);
     user2.resources = newAmountOfResourcesUser2;
     await user2.save();
     user1.resources = newAmountOfResourcesUser1;
     await user1.save();
-    checkHealth();
     raidReport("win");
     res.send(
-      JSON.stringify({win: user2.username, resources: Math.floor(user1.resources / 2), robotsDefending: robotsUser2.length + 1})
+      JSON.stringify({
+        win: user2.username,
+        resources: Math.floor(user1.resources / 2),
+        robotsDefending: robotsUser2.length + 1,
+      })
     );
-  }
-  async function checkHealth() {
-    let allRobots = await Robot.find({});
-    for (let robot of allRobots) {
-      if (robot.health <= 0) {
-        await Robot.deleteOne(robot);
-        let currentUser = await UserInfo.findOne({username: robot.creatorName});
-        let newNumberOfRobots = currentUser.numberOfRobots - 1;
-        currentUser.numberOfRobots = newNumberOfRobots;
-        currentUser.save();
-      }
-    }
   }
   async function raidReport(state) {
     user2.beenAttacked = true;
     user2.byWhom = user1.username;
     if (state === "lost") {
-      user2.resourcesLost = user2.resources / 2;
+      user2.resourcesLost = Math.floor(user2.resources / 2);
     } else if (state === "win") {
       user2.resourcesLost = 0;
     }
