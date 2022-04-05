@@ -63,15 +63,6 @@ app.get("/api/get-all-users", async (req, res) => {
 app.get("/api/user/:username", async (req, res) => {
   let currentUser = await UserInfo.findOne(req.params);
   let currentTime = Date.now();
-  let allUsersRobots = await Robot.find({
-    creatorName: req.params.username,
-  });
-  for (let robot of allUsersRobots) {
-    if (robot.health <= 0) {
-      robot.currentStatus = "Broken";
-      await robot.save()
-    }
-  }
   let userRobotsGathering = await Robot.find({
     creatorName: req.params.username,
     currentStatus: "Gathering",
@@ -80,7 +71,15 @@ app.get("/api/user/:username", async (req, res) => {
     creatorName: req.params.username,
     currentStatus: "Repairing",
   });
-
+  let allUsersRobots = await Robot.find({
+    creatorName: req.params.username,
+  });
+  for (let robot of allUsersRobots) {
+    if (robot.health <= 0 && robot.currentStatus !== "Repairing") {
+      robot.currentStatus = "Broken";
+      await robot.save();
+    }
+  }
   if (userRobotsGathering.length !== 0) {
     let newAmountOfResources = 0;
     userRobotsGathering.forEach((gatherer) => {
