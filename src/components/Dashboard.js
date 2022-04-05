@@ -286,6 +286,9 @@ function Dashboard() {
             </button>
             <button onClick={handleClickCombat}>Attack another player!</button>
           </div>
+          <button id="help-button" onClick={handleHowToPlayClick}>
+        Help<span>?</span>
+      </button>
         </aside>
         <CreateNewRobotModal
           handleClick={handleClickCreateRobot}
@@ -338,9 +341,7 @@ function Dashboard() {
         />
         <PhoneNotificationModal />
       </div>
-      <button id="help-button" onClick={handleHowToPlayClick}>
-        Help<span>?</span>
-      </button>
+
     </main>
   );
 }

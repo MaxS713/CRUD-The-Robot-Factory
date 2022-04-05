@@ -1,15 +1,10 @@
 #overlay {
   position: fixed;
   top: 0;
-  bottom: 0; /*The overlay covers the whole screen with TBLR properties of 0 and a position: fixed*/
+  bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(
-    0,
-    0,
-    0,
-    0.6
-  ); /*A black color with an opacity setting creates a "dim" effect */
+  background: rgba(0, 0, 0, 0.6);
   transition: opacity 500ms;
 }
 
@@ -28,7 +23,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding:1rem;
+  text-align: center;
+  padding: 1rem;
 }
 
 .resources-in-p {
@@ -126,9 +122,9 @@
     display: block;
   }
 
-  #phone-notif #modal-background{
-    height:95vh;
-    width:90vw;
+  #phone-notif #modal-background {
+    height: 95vh;
+    width: 90vw;
   }
 
   #phone-notif p {
