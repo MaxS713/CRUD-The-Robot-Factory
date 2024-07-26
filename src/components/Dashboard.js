@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from "react";
+
 import CreateNewRobotModal from "./CreateRobot";
 import DeleteRobotModal from "./DeleteRobot";
 import CombatModal from "./Combat";
@@ -10,7 +11,9 @@ import NoRobotsNotificationModal from "./NoRobotsNotificationModal";
 import PhoneNotificationModal from "./RotatePhoneNotif";
 import HowToPlayModal from "./HowToPlayModal";
 import ProgressBar from "./ProgressBar";
+
 import Gear from "../images/gear.png";
+
 import "./Dashboard.css";
 
 function Dashboard() {
@@ -23,8 +26,8 @@ function Dashboard() {
   const [selectedRobotID, setSelectedRobotID] = useState("");
   const [selectedRobotName, setSelectedRobotName] = useState("");
   const [selectedRobotStatus, setSelectedRobotStatus] = useState("");
+  const [currentUserIndex, setCurrentUserIndex] = useState(-1);
 
-  let allUserDataOrderedArray = [];
   let allUsernamesArray = [];
   let allRobotsAmountArray = [];
   let allResourcesAmountArray = [];
@@ -36,55 +39,54 @@ function Dashboard() {
   async function getRobots() {
     let allRobots = await fetch("api/get-all-robots");
     allRobots = await allRobots.json();
+    allRobots.forEach((robot) => {
+      if (robot.creatorName === activeUser) {
+        allRobotsArray.push(robot.robotName);
+        allStatusArray.push(robot.currentStatus);
+      }
+      if (robot.currentStatus === "Defending") {
+        numberOfDefendingRobots++;
+      }
+    });
     setRobotData(allRobots);
   }
-  useEffect(() => {
-    getRobots();
-  }, []);
+
+  useEffect(() => { getRobots(); }, []);
 
   async function getUsers() {
     let allUsers = await fetch("api/get-all-users");
     allUsers = await allUsers.json();
-    setUserDatabase(allUsers);
+
+    let allUserDataOrderedArray = [];
+  
+    allUsers.forEach((user) => { allUserDataOrderedArray.push(user); });
+
+    allUserDataOrderedArray.sort((a, b) => b.numberOfRobots - a.numberOfRobots);
+  
+    allUserDataOrderedArray.forEach((user) => {
+      allUsernamesArray.push(user.username);
+      allRobotsAmountArray.push(user.numberOfRobots);
+      allResourcesAmountArray.push(user.resources);
+    });
+
+    setCurrentUserIndex(allUserDataOrderedArray.indexOf(activeUser))
+
+    setUserDatabase(allUserDataOrderedArray);
   }
-  useEffect(() => {
-    getUsers();
-  }, []);
+
+  useEffect(() => { getUsers(); }, []);
 
   async function getCurrentUserInfo() {
     let userData = await fetch(`api/user/${activeUser}`);
     userData = await userData.json();
     setCurrentUserData(userData);
   }
-  useEffect(() => {
-    getCurrentUserInfo();
-  }, []);
 
-  userDatabase.forEach((user) => {
-    allUserDataOrderedArray.push(user);
-  });
-  allUserDataOrderedArray.sort((a, b) => b.numberOfRobots - a.numberOfRobots);
+  useEffect(() => { getCurrentUserInfo(); }, []);
 
-  allUserDataOrderedArray.forEach((user) => {
-    allUsernamesArray.push(user.username);
-    allRobotsAmountArray.push(user.numberOfRobots);
-    allResourcesAmountArray.push(user.resources);
-  });
-  let currentUserIndex = allUsernamesArray.indexOf(activeUser);
-
-  robotData.forEach((robot) => {
-    if (robot.creatorName === activeUser) {
-      allRobotsArray.push(robot.robotName);
-      allStatusArray.push(robot.currentStatus);
-    }
-    if (robot.currentStatus === "Defending") {
-      numberOfDefendingRobots++;
-    }
-  });
-
-  const [resourcesNotificationModalState, setResourcesNotificationModalState] =
-    useState(false);
+  const [resourcesNotificationModalState, setResourcesNotificationModalState] = useState(false);
   const [createRobotModalState, setCreateRobotModalState] = useState(false);
+
   function handleClickCreateRobot() {
     if (
       currentUserData.resources < 200 &&
@@ -100,9 +102,9 @@ function Dashboard() {
     }
   }
 
-  const [robotsNotificationModalState, setRobotsNotificationModalState] =
-    useState(false);
+  const [robotsNotificationModalState, setRobotsNotificationModalState] = useState(false);
   const [deleteRobotModalState, setDeleteRobotModalState] = useState(false);
+
   function handleClickDeleteRobot() {
     if (
       currentUserData.numberOfRobots === 0 &&
@@ -118,9 +120,9 @@ function Dashboard() {
     }
   }
 
-  const [noRobotsNotificationModalState, setNoRobotsNotificationModalState] =
-    useState(false);
+  const [noRobotsNotificationModalState, setNoRobotsNotificationModalState] = useState(false);
   const [combatModalState, setCombatModalState] = useState(false);
+
   function handleClickCombat() {
     if (
       numberOfDefendingRobots === 0 &&
@@ -137,6 +139,7 @@ function Dashboard() {
   }
 
   const [statusModalState, setStatusModalState] = useState(false);
+
   function handleClickStatus(event) {
     if (statusModalState === true) {
       setStatusModalState(false);
@@ -148,15 +151,14 @@ function Dashboard() {
     }
   }
 
-  const [raidNotificationModalState, setRaidNotificationModalState] =
-    useState(false);
+  const [raidNotificationModalState, setRaidNotificationModalState] = useState(false);
+
   useEffect(() => {
-    if (currentUserData.beenAttacked === true) {
-      setRaidNotificationModalState(true);
-    }
+    if (currentUserData.beenAttacked === true)  setRaidNotificationModalState(true);
   }, [currentUserData.beenAttacked]);
 
   const [howToPlayModalState, setHowToPlayModalState] = useState(false);
+
   function handleHowToPlayClick() {
     if (howToPlayModalState === true) {
       setHowToPlayModalState(false);
@@ -251,7 +253,7 @@ function Dashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {allUserDataOrderedArray.map((user, index) => {
+                  {userDatabase.map((user, index) => {
                     return (
                       <tr>
                         <td>{index + 1}</td>

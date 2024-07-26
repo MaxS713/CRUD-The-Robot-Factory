@@ -2,13 +2,14 @@ const express = require("express");
 const port = process.env.PORT || 5000;
 const cors = require("cors");
 const app = require("express")();
+
 const {v4} = require("uuid");
+
+require("dotenv").config();
 
 const mongoose = require("mongoose");
 
-mongoose.connect(
-  "mongodb+srv://MaxS713:nwcc4cJr0mTYpju4@cluster0.bgmkx.mongodb.net/factory"
-);
+mongoose.connect(process.env.MONGODB_URI);
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error"));
 

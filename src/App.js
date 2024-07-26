@@ -1,9 +1,12 @@
 import React from "react";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
+
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import NewUser from "./components/NewUser";
+
 import miniRobot from "./images/mini-robot.png";
+
 import "./App.css";
 
 function App() {
